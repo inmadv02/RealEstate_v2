@@ -42,4 +42,36 @@ public class UsuarioService extends BaseService<Usuario, UUID, UsuarioRepository
             return null;
         }
     }
+
+    public Usuario savePropietario(CreateUsuarioDTO createUserDTO) {
+        if(createUserDTO.getPassword().contentEquals(createUserDTO.getPassword2())) {
+            Usuario usuario = Usuario.builder()
+                    .password(passwordEncoder.encode(createUserDTO.getPassword()))
+                    .avatar(createUserDTO.getAvatar())
+                    .nombre(createUserDTO.getNombre())
+                    .email(createUserDTO.getEmail())
+                    .rol(RolUsuario.PROPIETARIO)
+                    .build();
+            return save(usuario);
+
+        } else {
+            return null;
+        }
+    }
+
+    public Usuario saveGestor(CreateUsuarioDTO createUserDTO) {
+        if(createUserDTO.getPassword().contentEquals(createUserDTO.getPassword2())) {
+            Usuario usuario = Usuario.builder()
+                    .password(passwordEncoder.encode(createUserDTO.getPassword()))
+                    .avatar(createUserDTO.getAvatar())
+                    .nombre(createUserDTO.getNombre())
+                    .email(createUserDTO.getEmail())
+                    .rol(RolUsuario.GESTOR)
+                    .build();
+            return save(usuario);
+
+        } else {
+            return null;
+        }
+    }
 }

@@ -13,16 +13,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/user/auth/register")
 @RequiredArgsConstructor
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
     private final UsuarioDTOConverter usuarioDTOConverter;
 
-    @PostMapping("/auth/register")
+    @PostMapping("/admin")
     public ResponseEntity<GetUsuarioDTO> nuevoUsuario(@RequestBody CreateUsuarioDTO nuevoUsuario){
         Usuario guardado = usuarioService.save(nuevoUsuario);
+
+        if (guardado == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        else {
+            return ResponseEntity.ok(usuarioDTOConverter.usuarioTOGetUsuarioDTO(guardado));
+        }
+    }
+
+    @PostMapping("/propietario")
+    public ResponseEntity<GetUsuarioDTO> nuevoPropietario(@RequestBody CreateUsuarioDTO nuevoUsuario){
+        Usuario guardado = usuarioService.savePropietario(nuevoUsuario);
+
+        if (guardado == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        else {
+            return ResponseEntity.ok(usuarioDTOConverter.usuarioTOGetUsuarioDTO(guardado));
+        }
+    }
+
+    @PostMapping("/gestor")
+    public ResponseEntity<GetUsuarioDTO> nuevoGestor(@RequestBody CreateUsuarioDTO nuevoUsuario){
+        Usuario guardado = usuarioService.saveGestor(nuevoUsuario);
 
         if (guardado == null) {
             return ResponseEntity.badRequest().build();
