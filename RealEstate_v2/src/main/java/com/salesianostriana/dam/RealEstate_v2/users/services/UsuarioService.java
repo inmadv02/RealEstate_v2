@@ -13,10 +13,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service("userDetailsService")
 @RequiredArgsConstructor
-public class UsuarioService extends BaseService<Usuario, Long, UsuarioRepository> implements UserDetailsService {
+public class UsuarioService extends BaseService<Usuario, UUID, UsuarioRepository> implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
 

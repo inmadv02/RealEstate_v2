@@ -1,14 +1,19 @@
 package com.salesianostriana.dam.RealEstate_v2.security.jwt;
 
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
+import com.salesianostriana.dam.RealEstate_v2.users.model.Usuario;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.java.Log;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import io.jsonwebtoken.security.SignatureException;
+import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.UUID;
 
 @Log
 @Service
@@ -33,8 +38,37 @@ public class JwtProvider {
     }
 
     public String generateToken(Authentication authentication) {
-        return null;
+        Usuario usuario = (Usuario) authentication.getPrincipal();
+
+        Date tokenExpirationDate = Date
+                .from(LocalDateTime
+                        .now()
+                        .plusSeconds(jwtLifeInSeconds)
+                        .atZone(ZoneId.systemDefault()).toInstant());
+
+        return Jwts.builder()
+                .setHeaderParam("typ", TOKEN_TYPE)
+                .setSubject(usuario.getId().toString())
+                .setIssuedAt(tokenExpirationDate)
+                .claim("fullname", usuario.getNombre())
+                .claim("rol", usuario.getRol().name())
+                .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
+                .compact();
     }
 
+    public boolean validateToken(String token) {
+
+        try {
+            parser.parseClaimsJws(token);
+            return true;
+        } catch (SignatureException | MalformedJwtException | ExpiredJwtException | UnsupportedJwtException | IllegalArgumentException ex) {
+            log.info("Error con el token: " + ex.getMessage());
+        }
+        return false;
+    }
+
+    public UUID getUserIdFromJwt(String token) {
+        return UUID.fromString(parser.parseClaimsJws(token).getBody().getSubject());
+    }
 
 }

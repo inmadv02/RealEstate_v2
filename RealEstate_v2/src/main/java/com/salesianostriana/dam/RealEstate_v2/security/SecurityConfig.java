@@ -1,8 +1,11 @@
 package com.salesianostriana.dam.RealEstate_v2.security;
 
+import com.salesianostriana.dam.RealEstate_v2.security.jwt.JwtAccessDeniedHandler;
+import com.salesianostriana.dam.RealEstate_v2.security.jwt.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -14,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 @Configuration
@@ -26,6 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final JwtAccessDeniedHandler accessDeniedHandler;
+    private final JwtAuthorizationFilter filter;
 
     @Override
     public void configure(AuthenticationManagerBuilder managerBuilder) throws Exception {
@@ -50,6 +55,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .mvcMatchers()
+                .antMatchers(HttpMethod.POST, "/auth/**").anonymous()
+                .antMatchers(HttpMethod.GET, "/me").anonymous()
+                .antMatchers("/h2-console/**").permitAll()
+                .anyRequest().authenticated();
+
+        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+
+        http.headers().frameOptions().disable();
     }
+
+
 }
