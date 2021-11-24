@@ -7,6 +7,9 @@ import com.salesianostriana.dam.RealEstate_v2.dto.inmobiliaria.InmobiliariaDTOCo
 import com.salesianostriana.dam.RealEstate_v2.model.Inmobiliaria;
 import com.salesianostriana.dam.RealEstate_v2.repositories.InmobiliariaRepository;
 import com.salesianostriana.dam.RealEstate_v2.services.InmobiliariaService;
+import com.salesianostriana.dam.RealEstate_v2.users.dto.CreateUsuarioDTO;
+import com.salesianostriana.dam.RealEstate_v2.users.dto.GetUsuarioDTO;
+import com.salesianostriana.dam.RealEstate_v2.users.dto.UsuarioDTOConverter;
 import com.salesianostriana.dam.RealEstate_v2.users.model.RolUsuario;
 import com.salesianostriana.dam.RealEstate_v2.users.model.Usuario;
 import com.salesianostriana.dam.RealEstate_v2.users.services.UsuarioService;
@@ -32,6 +35,8 @@ public class InmobiliariaController {
 
     private final InmobiliariaDTOConverter inmobiliariaDtoConverter;
     private final InmobiliariaService inmobiliariaService;
+    private final UsuarioService usuarioService;
+    private final UsuarioDTOConverter usuarioDTOConverter;
 
 
     @Operation(summary = "Crea una inmobiliaria")
@@ -102,15 +107,13 @@ public class InmobiliariaController {
                     content = @Content),
     })
     @GetMapping("/{id}")
-    public ResponseEntity<List<GetInmobiliariaDTO>> findOne (@PathVariable Long id){
+    public ResponseEntity<GetInmobiliariaDTO> findOne (@PathVariable Long id){
         Optional<Inmobiliaria> inmo = inmobiliariaService.findById(id);
         if(inmobiliariaService.findById(id).isEmpty()){
             return ResponseEntity.notFound().build();
         }
         else{
-            List<GetInmobiliariaDTO> inmobiliariaDTO= inmo.stream()
-                    .map(inmobiliariaDtoConverter::getInmobiliariaToInmobiliariaDto)
-                    .collect(Collectors.toList());
+            GetInmobiliariaDTO inmobiliariaDTO= inmobiliariaDtoConverter.getInmobiliariaToInmobiliariaDto(inmo.get());
             return ResponseEntity.ok().body(inmobiliariaDTO);
         }
     }
@@ -133,6 +136,23 @@ public class InmobiliariaController {
         } else {
             inmobiliariaService.deleteById(id);
                 return ResponseEntity.noContent().build();
+        }
+    }
+
+
+    @PutMapping("/{id}/gestor")
+    public ResponseEntity<GetUsuarioDTO> addGestor (@PathVariable Long id, @RequestBody CreateUsuarioDTO gestor){
+        Optional<Inmobiliaria> inmo = inmobiliariaService.findById(id);
+        if(inmobiliariaService.findById(id).isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        else{
+            Usuario getUsuarioDTO = usuarioService.saveGestor(gestor);
+
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(usuarioDTOConverter
+                            .usuarioTOGetUsuarioDTO(getUsuarioDTO));
         }
     }
 

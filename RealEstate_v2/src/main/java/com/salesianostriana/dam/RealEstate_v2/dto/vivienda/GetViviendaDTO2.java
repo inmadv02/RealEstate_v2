@@ -24,6 +24,6 @@ public class GetViviendaDTO2 {
     private boolean tienePiscina;
     private boolean tieneAscensor;
     private boolean tieneGaraje;
-    private GetPropietarioDTO getPropietarioDTO;
+
 }
 
