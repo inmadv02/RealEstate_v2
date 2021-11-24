@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +19,6 @@ public class CreateViviendaDTO {
 
     private boolean tienePiscina, tieneAscensor, tieneGaraje;
 
-    private String propietario;
+    private UUID propietario;
     private String inmobiliaria;
 }

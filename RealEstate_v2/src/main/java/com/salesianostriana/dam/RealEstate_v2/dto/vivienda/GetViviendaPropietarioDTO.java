@@ -2,10 +2,13 @@ package com.salesianostriana.dam.RealEstate_v2.dto.vivienda;
 
 
 import com.salesianostriana.dam.RealEstate_v2.model.Tipo;
+import com.salesianostriana.dam.RealEstate_v2.users.model.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -14,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class GetViviendaPropietarioDTO {
 
 
-    private Long id;
+    private UUID id;
     private String titulo, descripcion, avatar;
     private String direccion, codigoPostal, provincia, poblacion, latlng;
     private int numHabitaciones, numBanios;
@@ -23,9 +26,5 @@ public class GetViviendaPropietarioDTO {
 
     private boolean tienePiscina, tieneAscensor, tieneGaraje;
 
-    private String nombre;
-    private String apellidos;
-    private String email;
-    private String telefono;
-    private String avatar2;
+    private Usuario propietario;
 }

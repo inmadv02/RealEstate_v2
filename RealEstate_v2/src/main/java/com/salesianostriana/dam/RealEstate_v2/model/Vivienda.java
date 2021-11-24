@@ -2,11 +2,13 @@ package com.salesianostriana.dam.RealEstate_v2.model;
 
 import com.salesianostriana.dam.RealEstate_v2.users.model.Usuario;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -17,8 +19,19 @@ import java.util.List;
 public class Vivienda implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //Al hacerlo en auto, peta
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator",
+            parameters = {
+                    @org.hibernate.annotations.Parameter(
+                            name = "uuid_gen_strategy_class",
+                            value = "org.hibernate.id.uuid.CustomVersionOneStrategy"
+                    )
+            }
+    )
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
 
     private String titulo, descripcion, avatar, latlng;
     private String direccion, poblacion, provincia;
@@ -72,10 +85,31 @@ public class Vivienda implements Serializable {
     public Vivienda(String titulo, String descripcion, String avatar, double precio, int interesas) {
     }
 
+    public Vivienda(String titulo, String avatar, String tipo, double precio, String ubicacion, double metrosCuadrados, int numBanios, int numHabitaciones, boolean tieneAscensor, boolean tieneGaraje, boolean tienePiscina, UUID propietario, String inmobiliaria) {
+    }
+
 
     ///// HELPERS /////
 
+    public void addToPropietario(Usuario p) {
+        this.propietario = p;
+        p.getViviendas().add(this);
+    }
 
+    public void removeFromPropietario(Usuario p) {
+        p.getViviendas().remove(this);
+        this.propietario = null;
+    }
+
+    public void addToInmobiliaria(Inmobiliaria i) {
+        this.inmobiliaria = i;
+        i.getViviendas().add(this);
+    }
+
+    public void removeFromInmobiliaria(Inmobiliaria i) {
+        i.getViviendas().remove(this);
+        this.inmobiliaria = null;
+    }
 
 }
 

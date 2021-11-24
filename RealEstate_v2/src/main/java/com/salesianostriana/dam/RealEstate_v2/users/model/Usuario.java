@@ -103,5 +103,8 @@ public class Usuario implements UserDetails {
         this.avatar = avatar;
         this.rol = rol;
         this.viviendas = viviendas;
+
     }
+
+
 }

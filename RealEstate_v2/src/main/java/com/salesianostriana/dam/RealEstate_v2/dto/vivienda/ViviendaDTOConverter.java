@@ -4,6 +4,7 @@ package com.salesianostriana.dam.RealEstate_v2.dto.vivienda;
 import com.salesianostriana.dam.RealEstate_v2.dto.inmobiliaria.GetViviendaInmobiliariaDto;
 import com.salesianostriana.dam.RealEstate_v2.model.Tipo;
 import com.salesianostriana.dam.RealEstate_v2.model.Vivienda;
+import com.salesianostriana.dam.RealEstate_v2.users.model.Usuario;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -108,22 +109,13 @@ public class ViviendaDTOConverter {
                 .provincia(v.getProvincia())
                 .poblacion(v.getPoblacion())
                 .metrosCuadrados(v.getMetrosCuadrados())
-                .nombre(v.getPropietario().getNombre())
-                .apellidos(v.getPropietario().getApellidos())
-                .email(v.getPropietario().getEmail())
-                .telefono(v.getPropietario().getTelefono())
-                .avatar2(v.getPropietario().getAvatar())
+                .propietario(v.getPropietario())
                 .build();
     }
 
-    /*public Usuario getPropietarioVivienda (GetViviendaPropietarioDTO gv){
-        return Propietario.builder()
+    public Usuario getPropietarioVivienda (GetViviendaPropietarioDTO gv){
+        return Usuario.builder()
                 .id(gv.getId())
-                .nombre(gv.getNombre())
-                .apellidos(gv.getApellidos())
-                .email(gv.getEmail())
-                .telefono(gv.getTelefono())
-                .avatar(gv.getAvatar2())
                 .build();
     }
 
@@ -137,7 +129,7 @@ public class ViviendaDTOConverter {
                 .poblacion(gv.getPoblacion())
                 .provincia(gv.getProvincia())
                 .latlng(gv.getLatlng())
-                .tipoVivienda(tipo)
+                .tipoVivienda(gv.getTipo())
                 .metrosCuadrados(gv.getMetrosCuadrados())
                 .numBanios(gv.getNumBanios())
                 .numHabitaciones(gv.getNumHabitaciones())
@@ -148,26 +140,6 @@ public class ViviendaDTOConverter {
                 .build();
     }
 
-    /*No lo uso al final
-    public Vivienda GetVivienda2 ( GetViviendaDTO2 v){
-        return Vivienda.builder()
-                .titulo(v.getTitulo())
-                .descripcion(v.getDescripcion())
-                .avatar(v.getAvatar())
-                .codigoPostal(v.getAvatar())
-                .tipoVivienda(v.getTipoVivienda())
-                .tieneGaraje(v.isTieneGaraje())
-                .latlng(v.getLatlng())
-                .tieneAscensor(v.isTieneAscensor())
-                .tienePiscina(v.isTienePiscina())
-                .provincia(v.getProvincia())
-                .poblacion(v.getPoblacion())
-                .precio(v.getPrecio())
-                .numHabitaciones(v.getNumHabitaciones())
-                .numBanios(v.getNumBanios())
-                .metrosCuadrados(v.getMetrosCuadrados())
-                .direccion(v.getDireccion())
-                .build();
-    }*/
+
 
 }

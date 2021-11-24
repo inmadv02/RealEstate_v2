@@ -7,6 +7,9 @@ import com.salesianostriana.dam.RealEstate_v2.dto.inmobiliaria.InmobiliariaDTOCo
 import com.salesianostriana.dam.RealEstate_v2.model.Inmobiliaria;
 import com.salesianostriana.dam.RealEstate_v2.repositories.InmobiliariaRepository;
 import com.salesianostriana.dam.RealEstate_v2.services.InmobiliariaService;
+import com.salesianostriana.dam.RealEstate_v2.users.model.RolUsuario;
+import com.salesianostriana.dam.RealEstate_v2.users.model.Usuario;
+import com.salesianostriana.dam.RealEstate_v2.users.services.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,7 +28,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/inmobiliaria")
-public class    InmobiliariaController {
+public class InmobiliariaController {
 
     private final InmobiliariaDTOConverter inmobiliariaDtoConverter;
     private final InmobiliariaService inmobiliariaService;
@@ -44,10 +47,18 @@ public class    InmobiliariaController {
 
 
     @PostMapping("/")
-    public ResponseEntity<Inmobiliaria> create (@RequestBody  Inmobiliaria inmobiliaria){
-       return ResponseEntity
+    public ResponseEntity<Inmobiliaria> create (@RequestBody CreateInmobiliariaDTO inmobiliaria){
+
+
+        if(inmobiliaria.getNombre().isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }
+
+        Inmobiliaria inmobiliariaNueva = inmobiliariaDtoConverter.createInmobiliariaDtoToInmobiliaria(inmobiliaria);
+
+        return ResponseEntity
                .status(HttpStatus.CREATED)
-               .body(inmobiliariaService.save(inmobiliaria));
+               .body(inmobiliariaService.save(inmobiliariaNueva));
 
     }
 
@@ -116,12 +127,13 @@ public class    InmobiliariaController {
     @DeleteMapping("/{id}")
     public ResponseEntity<GetInmobiliariaDTO> borrarInmobiliaria(@PathVariable Long id){
 
-        if(inmobiliariaService.findById(id).isEmpty() ){
+        if(inmobiliariaService.findById(id).isEmpty()){
             return ResponseEntity.notFound().build();
-    }else {
-        inmobiliariaService.deleteById(id);
-            return ResponseEntity.noContent().build();
-         }
+
+        } else {
+            inmobiliariaService.deleteById(id);
+                return ResponseEntity.noContent().build();
+        }
     }
 
 

@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.RealEstate_v2.dto.vivienda;
 
+import com.salesianostriana.dam.RealEstate_v2.dto.propietario.GetPropietarioDTO;
 import com.salesianostriana.dam.RealEstate_v2.model.Tipo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,5 +24,6 @@ public class GetViviendaDTO2 {
     private boolean tienePiscina;
     private boolean tieneAscensor;
     private boolean tieneGaraje;
+    private GetPropietarioDTO getPropietarioDTO;
 }
 

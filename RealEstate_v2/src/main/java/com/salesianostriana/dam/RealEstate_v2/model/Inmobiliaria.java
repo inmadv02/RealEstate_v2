@@ -33,7 +33,6 @@ public class Inmobiliaria implements Serializable {
 
     @Builder.Default
     @OneToMany(mappedBy = "inmobiliaria", fetch = FetchType.EAGER)
-
     private List<Vivienda> viviendas= new ArrayList<>();
 
     public Inmobiliaria(String nombre, String email, String telefono) {

@@ -16,6 +16,8 @@ import com.salesianostriana.dam.RealEstate_v2.dto.vivienda.ViviendaDTOConverter;
 import com.salesianostriana.dam.RealEstate_v2.model.*;
 import com.salesianostriana.dam.RealEstate_v2.services.InteresaService;
 import com.salesianostriana.dam.RealEstate_v2.services.ViviendaService;
+import com.salesianostriana.dam.RealEstate_v2.users.model.Usuario;
+import com.salesianostriana.dam.RealEstate_v2.users.services.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,6 +30,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,6 +55,7 @@ public class ViviendaController {
     private final InmobiliariaRepository inmobiliariaRepository;
     private final InteresaDTOConverter interesaDTOConverter;
     private final ViviendaDTOConverter dtoConverter;
+    private final UsuarioService propietarioService;
 
 
     @Operation(summary = "Se listan todas las viviendas")
@@ -81,7 +85,6 @@ public class ViviendaController {
         }
     }
 
-    /*
     @Operation(summary = "Crea una nueva vivienda")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
@@ -94,10 +97,11 @@ public class ViviendaController {
     })
 
     @PostMapping("/")
-    public ResponseEntity<GetViviendaPropietarioDTO> createVivienda (@RequestBody GetViviendaPropietarioDTO dto){
+    public ResponseEntity<GetViviendaPropietarioDTO> createVivienda (@RequestBody GetViviendaPropietarioDTO dto,
+                                                                     @AuthenticationPrincipal Usuario propietario){
 
         Vivienda vivienda = viviendaDTOConverter.getViviendaPropietario(dto);
-        Propietario propietario = viviendaDTOConverter.getPropietarioVivienda(dto);
+        propietario = viviendaDTOConverter.getPropietarioVivienda(dto);
 
 
         if(dto.getTitulo().isEmpty()){
@@ -110,7 +114,7 @@ public class ViviendaController {
                 propietario = propietarioService.findById(propietario.getId()).get();
 
             propietarioService.save(propietario);
-            vivienda.addPropietario(propietario);
+            vivienda.addToPropietario(propietario);
             viviendaService.save(vivienda);
 
             GetViviendaPropietarioDTO nuevo = viviendaDTOConverter.createViviendaPropietarioDTO(vivienda);
@@ -121,9 +125,8 @@ public class ViviendaController {
 
         }
 
-
     }
-
+/*
     @Operation(summary = "Crea un nuevo interesado e interesa asociado a una vivienda")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",

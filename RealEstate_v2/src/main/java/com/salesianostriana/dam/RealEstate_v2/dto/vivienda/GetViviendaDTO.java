@@ -5,13 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
 public class GetViviendaDTO {
 
-    private Long id;
+    private UUID id;
     private String titulo, descripcion, avatar;
     private String ubicacion, zona;
     private int numHabitaciones, numBanios;
