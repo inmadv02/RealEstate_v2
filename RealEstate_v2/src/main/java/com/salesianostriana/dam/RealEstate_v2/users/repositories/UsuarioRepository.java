@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.RealEstate_v2.users.repositories;
 
+import com.salesianostriana.dam.RealEstate_v2.users.model.RolUsuario;
 import com.salesianostriana.dam.RealEstate_v2.users.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,4 +10,6 @@ import java.util.UUID;
 public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
 
     Optional<Usuario> findUserByEmail(String email);
+
+    Optional<Usuario> findUsuarioByRol(RolUsuario rol);
 }

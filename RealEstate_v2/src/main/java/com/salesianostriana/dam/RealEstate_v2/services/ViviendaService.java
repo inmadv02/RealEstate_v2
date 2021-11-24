@@ -3,9 +3,11 @@ package com.salesianostriana.dam.RealEstate_v2.services;
 import com.salesianostriana.dam.RealEstate_v2.model.Vivienda;
 import com.salesianostriana.dam.RealEstate_v2.repositories.ViviendaRepository;
 import com.salesianostriana.dam.RealEstate_v2.services.base.BaseService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ViviendaService extends BaseService<Vivienda, Long, ViviendaRepository> {
 
     public List<Vivienda> findTop10ViviendaOrderByInteresas (){
