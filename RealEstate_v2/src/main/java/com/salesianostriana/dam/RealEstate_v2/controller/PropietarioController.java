@@ -41,31 +41,7 @@ public class PropietarioController {
     private final AuthenticationController authenticationController;
 
 
-   /* @Operation(summary = "Borra un Propietario creado")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204",
-                    description = "Se ha borrado el propietario",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Propietario.class))})
-    })
-    @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id) {
 
-        if(propietarioService.findById(id).isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
-
-        else {
-            propietarioService.deleteById(id);
-
-            return ResponseEntity.noContent().build();
-        }
-
-
-    }
-
-
-    */
     @Operation(summary = "Buscamos todos los propietarios")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
@@ -109,5 +85,34 @@ public class PropietarioController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @Operation(summary = "Borra un Propietario creado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204",
+                    description = "Se ha borrado el propietario",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Usuario.class))})
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable UUID id, @AuthenticationPrincipal Usuario usuario) {
+
+        Optional<Usuario> prop = propietarioService.findById(id);
+
+        if(!prop.isEmpty() && usuario.getId().equals(id)){
+
+            propietarioService.deleteById(id);
+
+            return ResponseEntity.noContent().build();
+        }
+
+        else {
+            return ResponseEntity.notFound().build();
+        }
+
+
+    }
+
+
+
 
 }
