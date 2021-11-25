@@ -261,6 +261,18 @@ public class ViviendaController {
 
 */
 
+
+    @Operation(summary = "Edita una vivienda")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha cambiado la vivienda y se ha guardado",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "No se ha encontrado la vivienda",
+                    content = @Content),
+    })
+
     @PutMapping("/{id}")
     public ResponseEntity<Vivienda> edit (@RequestBody Vivienda v,
                                           @PathVariable Long id,
@@ -338,7 +350,7 @@ public class ViviendaController {
 
     }
 
-    /*
+
 
     @Operation(summary = "Borra la asociación entre una vivienda y una inmobiliaria")
     @ApiResponses(value = {
@@ -361,7 +373,7 @@ public class ViviendaController {
         else {
 
             Inmobiliaria inmobiliaria = viviendaService.findById(id).get().getInmobiliaria();
-            viviendaService.findById(id).get().removeInmobiliaria(inmobiliaria);
+            viviendaService.findById(id).get().removeFromInmobiliaria(inmobiliaria);
             viviendaService.save(viviendaService.findById(id).get());
 
             return ResponseEntity.noContent().build();
@@ -371,7 +383,7 @@ public class ViviendaController {
     }
 
 
-*/
+
 
 
     

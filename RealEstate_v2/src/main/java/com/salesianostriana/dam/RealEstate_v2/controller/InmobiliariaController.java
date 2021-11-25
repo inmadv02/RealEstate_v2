@@ -5,6 +5,7 @@ import com.salesianostriana.dam.RealEstate_v2.dto.inmobiliaria.CreateInmobiliari
 import com.salesianostriana.dam.RealEstate_v2.dto.inmobiliaria.GetInmobiliariaDTO;
 import com.salesianostriana.dam.RealEstate_v2.dto.inmobiliaria.InmobiliariaDTOConverter;
 import com.salesianostriana.dam.RealEstate_v2.model.Inmobiliaria;
+import com.salesianostriana.dam.RealEstate_v2.model.Vivienda;
 import com.salesianostriana.dam.RealEstate_v2.repositories.InmobiliariaRepository;
 import com.salesianostriana.dam.RealEstate_v2.services.InmobiliariaService;
 import com.salesianostriana.dam.RealEstate_v2.users.dto.CreateUsuarioDTO;
@@ -18,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +28,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @CrossOrigin("http://localhost:4200")
+@Tag(name = "Inmobiliaria", description = "Controller de las inmobiliarias")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/inmobiliaria")
@@ -142,6 +146,16 @@ public class InmobiliariaController {
         }
     }
 
+    @Operation(summary = "Crea un nuevo gestor")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Se ha creado el gestor",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Usuario.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se ha encontrado la inmobiliaria",
+                    content = @Content),
+    })
 
     @PostMapping("/{id}/gestor")
     public ResponseEntity<GetUsuarioDTO> addGestor (@PathVariable Long id, @RequestBody CreateUsuarioDTO gestor){
@@ -158,6 +172,28 @@ public class InmobiliariaController {
                             .usuarioTOGetUsuarioDTO(getUsuarioDTO));
         }
     }
+
+    @DeleteMapping("gestor/{id}")
+    public ResponseEntity<GetUsuarioDTO> removeGestor (@PathVariable UUID id, @AuthenticationPrincipal Usuario gestor){
+
+        Optional <Usuario> datos = usuarioService.usuariosPorRol(RolUsuario.GESTOR);
+        Optional <Usuario> datos2 = usuarioService.usuariosPorRol(RolUsuario.ADMIN);
+        Optional<Usuario> gestorEliminado = usuarioService.findById(id);
+
+        // Comprobar la inmobiliaria con la del usuario gestor con la del buscado por id
+
+        if (gestorEliminado.get().getInmobiliaria().equals(gestor.getInmobiliaria())
+                || datos2.isPresent() ) {
+            usuarioService.deleteById(id);
+
+            return ResponseEntity.noContent().build();
+        }
+
+        else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 
 
