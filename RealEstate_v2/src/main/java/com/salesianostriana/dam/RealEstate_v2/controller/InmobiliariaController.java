@@ -140,7 +140,7 @@ public class InmobiliariaController {
     }
 
 
-    @PutMapping("/{id}/gestor")
+    @PostMapping("/{id}/gestor")
     public ResponseEntity<GetUsuarioDTO> addGestor (@PathVariable Long id, @RequestBody CreateUsuarioDTO gestor){
         Optional<Inmobiliaria> inmo = inmobiliariaService.findById(id);
         if(inmobiliariaService.findById(id).isEmpty()){

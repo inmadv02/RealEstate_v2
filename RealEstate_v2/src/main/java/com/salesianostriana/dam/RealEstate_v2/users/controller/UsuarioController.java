@@ -21,7 +21,7 @@ public class UsuarioController {
     private final UsuarioDTOConverter usuarioDTOConverter;
 
     @PostMapping("/admin")
-    public ResponseEntity<GetUsuarioDTO> nuevoUsuario(@RequestBody CreateUsuarioDTO nuevoUsuario){
+    public ResponseEntity<GetUsuarioDTO> nuevoAdmin(@RequestBody CreateUsuarioDTO nuevoUsuario){
         Usuario guardado = usuarioService.save(nuevoUsuario);
 
         if (guardado == null) {

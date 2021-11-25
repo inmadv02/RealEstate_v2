@@ -5,14 +5,10 @@ import com.salesianostriana.dam.RealEstate_v2.dto.inmobiliaria.GetViviendaInmobi
 import com.salesianostriana.dam.RealEstate_v2.dto.inmobiliaria.InmobiliariaDTOConverter;
 import com.salesianostriana.dam.RealEstate_v2.dto.interesa.GetInteresaDTO;
 import com.salesianostriana.dam.RealEstate_v2.dto.interesa.InteresaDTOConverter;
-import com.salesianostriana.dam.RealEstate_v2.dto.vivienda.GetInmobiliariaViviendaDTO;
-import com.salesianostriana.dam.RealEstate_v2.dto.vivienda.GetViviendaDTO;
-import com.salesianostriana.dam.RealEstate_v2.dto.vivienda.GetViviendaPropietarioDTO;
+import com.salesianostriana.dam.RealEstate_v2.dto.vivienda.*;
 import com.salesianostriana.dam.RealEstate_v2.repositories.InmobiliariaRepository;
 import com.salesianostriana.dam.RealEstate_v2.repositories.ViviendaRepository;
 import com.salesianostriana.dam.RealEstate_v2.services.InmobiliariaService;
-import com.salesianostriana.dam.RealEstate_v2.dto.vivienda.GetViviendaSummarizedDTO;
-import com.salesianostriana.dam.RealEstate_v2.dto.vivienda.ViviendaDTOConverter;
 import com.salesianostriana.dam.RealEstate_v2.model.*;
 import com.salesianostriana.dam.RealEstate_v2.services.InteresaService;
 import com.salesianostriana.dam.RealEstate_v2.services.ViviendaService;
@@ -97,12 +93,8 @@ public class ViviendaController {
     })
 
     @PostMapping("/")
-    public ResponseEntity<GetViviendaPropietarioDTO> createVivienda (@RequestBody GetViviendaPropietarioDTO dto,
+    public ResponseEntity<CreateViviendaDTO> createVivienda (@RequestBody CreateViviendaDTO dto,
                                                                      @AuthenticationPrincipal Usuario propietario){
-
-        Vivienda vivienda = viviendaDTOConverter.getViviendaPropietario(dto);
-        propietario = viviendaDTOConverter.getPropietarioVivienda(dto);
-
 
         if(dto.getTitulo().isEmpty()){
             return ResponseEntity.badRequest().build();
@@ -110,18 +102,9 @@ public class ViviendaController {
 
         else{
 
-            if(propietario.getId()!=null)
-                propietario = propietarioService.findById(propietario.getId()).get();
+            viviendaService.addVivienda(dto, propietario);
+            return ResponseEntity.status(HttpStatus.CREATED).body(dto);
 
-            propietarioService.save(propietario);
-            vivienda.addToPropietario(propietario);
-            viviendaService.save(vivienda);
-
-            GetViviendaPropietarioDTO nuevo = viviendaDTOConverter.createViviendaPropietarioDTO(vivienda);
-
-            return  ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(nuevo);
 
         }
 

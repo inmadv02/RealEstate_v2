@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import java.util.UUID;
 
 @Data
@@ -19,6 +20,6 @@ public class CreateViviendaDTO {
 
     private boolean tienePiscina, tieneAscensor, tieneGaraje;
 
-    private UUID propietario;
-    private String inmobiliaria;
+    @Column(nullable = true)
+    private Long inmobiliaria;
 }

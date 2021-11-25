@@ -48,9 +48,7 @@ public class ViviendaDTOConverter {
                 v.getNumHabitaciones(),
                 v.isTieneAscensor(),
                 v.isTieneGaraje(),
-                v.isTienePiscina(),
-                v.getPropietario(),
-                v.getInmobiliaria()
+                v.isTienePiscina()
         );
     }
 

@@ -89,6 +89,10 @@ public class Vivienda implements Serializable {
     }
 
 
+    public Vivienda(String titulo, String avatar, String tipo, double precio, String ubicacion, double metrosCuadrados, int numBanios, int numHabitaciones, boolean tieneAscensor, boolean tieneGaraje, boolean tienePiscina) {
+    }
+
+
     ///// HELPERS /////
 
     public void addToPropietario(Usuario p) {
