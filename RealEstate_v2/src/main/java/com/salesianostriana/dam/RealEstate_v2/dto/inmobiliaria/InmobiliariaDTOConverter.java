@@ -10,11 +10,13 @@ import java.util.List;
 public class InmobiliariaDTOConverter {
 
     public Inmobiliaria createInmobiliariaDtoToInmobiliaria(CreateInmobiliariaDTO c){
-        return new Inmobiliaria(
-                c.getNombre(),
-                c.getEmail(),
-                c.getTelefono()
-        );
+        return Inmobiliaria
+                .builder()
+                .nombre(c.getNombre())
+                .email(c.getEmail())
+                .telefono(c.getTelefono())
+                .build();
+
     }
     public GetInmobiliariaDTO getInmobiliariaToInmobiliariaDto(Inmobiliaria in){
 

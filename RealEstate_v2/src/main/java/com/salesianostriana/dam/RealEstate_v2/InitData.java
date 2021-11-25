@@ -2,6 +2,7 @@ package com.salesianostriana.dam.RealEstate_v2;
 
 import com.salesianostriana.dam.RealEstate_v2.security.PasswordEncoderConfig;
 import com.salesianostriana.dam.RealEstate_v2.users.controller.UsuarioController;
+import com.salesianostriana.dam.RealEstate_v2.users.dto.CreateUsuarioDTO;
 import com.salesianostriana.dam.RealEstate_v2.users.dto.UsuarioDTOConverter;
 import com.salesianostriana.dam.RealEstate_v2.users.model.Usuario;
 import com.salesianostriana.dam.RealEstate_v2.users.services.UsuarioService;
@@ -25,18 +26,16 @@ public class InitData {
     @PostConstruct
     public void initData () {
 
-        Usuario usuario = Usuario.builder()
+        CreateUsuarioDTO usuario = CreateUsuarioDTO.builder()
                 .nombre("José Javier")
-                .apellidos("Domínguez Rafael")
                 .email("josejavier@gmail.com")
                 .avatar("sigrbosigt")
                 .password("hola3")
+                .password2("hola3")
+                .username("javi_df")
                 .build();
-
-        passwordEncoder.encode(usuario.getPassword());
-
-        config.passwordEncoder().encode(usuario.getPassword());
         service.save(usuario);
+
 
 
 
