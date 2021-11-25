@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -107,14 +108,16 @@ public class InmobiliariaController {
                     content = @Content),
     })
     @GetMapping("/{id}")
-    public ResponseEntity<GetInmobiliariaDTO> findOne (@PathVariable Long id){
+    public ResponseEntity<GetInmobiliariaDTO> findOne (@PathVariable Long id, @AuthenticationPrincipal Usuario usuario){
         Optional<Inmobiliaria> inmo = inmobiliariaService.findById(id);
-        if(inmobiliariaService.findById(id).isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
-        else{
+        Optional <Usuario> datos = usuarioService.usuariosPorRol(RolUsuario.GESTOR);
+
+        if(inmo.isPresent() || inmo.isPresent() && datos.get().getInmobiliaria().getId().equals(id)) {
             GetInmobiliariaDTO inmobiliariaDTO= inmobiliariaDtoConverter.getInmobiliariaToInmobiliariaDto(inmo.get());
             return ResponseEntity.ok().body(inmobiliariaDTO);
+        }
+        else{
+            return ResponseEntity.notFound().build();
         }
     }
 

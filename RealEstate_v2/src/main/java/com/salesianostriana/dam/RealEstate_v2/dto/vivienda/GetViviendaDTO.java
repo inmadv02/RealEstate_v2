@@ -13,7 +13,7 @@ import java.util.UUID;
 @SuperBuilder
 public class GetViviendaDTO {
 
-    private UUID id;
+    private Long id;
     private String titulo, descripcion, avatar;
     private String ubicacion, zona;
     private int numHabitaciones, numBanios;

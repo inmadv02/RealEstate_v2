@@ -62,13 +62,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/propietario").authenticated()
                 .antMatchers(HttpMethod.GET, "/propietario/**").hasAnyRole("ADMIN", "PROPIETARIO")
                 .antMatchers(HttpMethod.DELETE, "/propietario/{id}").hasAnyRole("ADMIN", "PROPIETARIO")
+
                 .antMatchers(HttpMethod.POST, "/vivienda/").authenticated()
                 .antMatchers(HttpMethod.GET, "/vivienda/**").authenticated()
+                .antMatchers(HttpMethod.POST, "/vivienda/").authenticated()
+                .antMatchers(HttpMethod.PUT, "/vivienda/{id}").hasAnyRole("ADMIN" , "PROPIETARIO")
+                .antMatchers(HttpMethod.DELETE, "/vivienda/{id}").hasAnyRole("ADMIN" , "PROPIETARIO")
+                .antMatchers(HttpMethod.POST, "/vivienda/{id}/inmobiliaria/{id2}").hasAnyRole("ADMIN" , "PROPIETARIO")
+                .antMatchers(HttpMethod.DELETE, "/vivienda/{id}/inmobiliaria/{id2}").hasAnyRole("ADMIN" , "PROPIETARIO", "GESTOR")
+
                 .antMatchers(HttpMethod.GET, "/inmobiliaria").authenticated()
                 .antMatchers(HttpMethod.GET, "/inmobiliaria/**").authenticated()
-                .antMatchers(HttpMethod.POST, "/inmobiliaria/").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/inmobiliaria/").hasAnyRole("ADMIN", "GESTOR")
                 .antMatchers(HttpMethod.DELETE, "/inmobiliaria/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/inmobiliaria/{id}/gestor").hasAnyRole("ADMIN", "GESTOR")
+                .antMatchers(HttpMethod.DELETE, "/inmobiliaria/gestor/{id}").hasAnyRole("ADMIN" , "GESTOR")
+                .antMatchers(HttpMethod.DELETE, "/inmobiliaria/{id}/gestor").hasRole("ADMIN")
+
+                .antMatchers(HttpMethod.POST, "/vivienda/{id}/meinteresa").hasRole("PROPIETARIO")
+                .antMatchers(HttpMethod.DELETE, "/vivienda/{id}/meinteresa").hasAnyRole("ADMIN" , "PROPIETARIO")
+                .antMatchers(HttpMethod.GET, "/interesado").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/interesado/{id}").hasAnyRole("ADMIN" , "PROPIETARIO")
+
+
                 .antMatchers(HttpMethod.GET, "/me").authenticated()
                 .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated();

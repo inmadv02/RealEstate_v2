@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -178,7 +179,7 @@ public class ViviendaController {
         }
 
     }
-
+*/
     @Operation(summary = "Obtiene una vivienda creada")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
@@ -190,7 +191,7 @@ public class ViviendaController {
                     content = @Content),
     })
     @GetMapping("/{id}")
-    public ResponseEntity<GetViviendaDTO> findOne(@PathVariable Long id) {
+        public ResponseEntity<GetViviendaDTO> findOne(@PathVariable Long id) {
 
         Optional<Vivienda> vivienda = viviendaService.findById(id);
 
@@ -211,6 +212,8 @@ public class ViviendaController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = Vivienda.class))})
     })
+
+
     @GetMapping("/top")
     public ResponseEntity<List<GetViviendaSummarizedDTO>> top10Viviendas (@RequestParam("n") int n) {
         List<Vivienda> datos = viviendaService.findTop10ViviendaOrderByInteresas();
@@ -223,7 +226,7 @@ public class ViviendaController {
 
 
     }
-
+/*
     @Operation(summary = "Borra un interesa asociado a una vivienda y a un interesado")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204",
@@ -231,6 +234,7 @@ public class ViviendaController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = Vivienda.class))})
     })
+
 
     @DeleteMapping("/{id1}/meinteresa/{id2}")
     public ResponseEntity<?> delete(@PathVariable Long id1, @PathVariable Long id2) {
@@ -255,15 +259,25 @@ public class ViviendaController {
 
 
 
-
+*/
 
     @PutMapping("/{id}")
-    public ResponseEntity<Vivienda> edit (@RequestBody Vivienda v, @PathVariable Long id) {
+    public ResponseEntity<Vivienda> edit (@RequestBody Vivienda v,
+                                          @PathVariable Long id,
+                                          @AuthenticationPrincipal Usuario propietario) {
 
-        if(viviendaService.findById(id).isEmpty()){
+        Optional <Vivienda> viviendaEditada = viviendaService.findById(id);
+
+        if(viviendaEditada.isEmpty()){
             return ResponseEntity.notFound().build();
 
-        }else {
+        }
+
+        if (!propietario.getViviendas().contains(viviendaEditada)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        else {
             return ResponseEntity.of(
 
                     viviendaService.findById(id).map(m -> {
@@ -301,10 +315,18 @@ public class ViviendaController {
                             schema = @Schema(implementation = Vivienda.class))})
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id) {
+    public ResponseEntity delete(@PathVariable Long id, @AuthenticationPrincipal Usuario propietario) {
 
-        if(viviendaService.findById(id).isEmpty()){
+        Optional <Vivienda> vivienda = viviendaService.findById(id);
+
+        if(vivienda.isEmpty()){
             return ResponseEntity.notFound().build();
+        }
+
+        if (!propietario.getViviendas().contains(vivienda.get().getId())) {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .build();
         }
 
         else {
@@ -315,6 +337,8 @@ public class ViviendaController {
 
 
     }
+
+    /*
 
     @Operation(summary = "Borra la asociación entre una vivienda y una inmobiliaria")
     @ApiResponses(value = {

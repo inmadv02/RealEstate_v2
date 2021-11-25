@@ -55,7 +55,7 @@ public class PropietarioController {
     @GetMapping("/")
     public ResponseEntity<List<GetPropietarioDTO>> findAll(){
 
-        Optional <Usuario> datos = propietarioService.usuariosPropietarios(RolUsuario.PROPIETARIO);
+        Optional <Usuario> datos = propietarioService.usuariosPorRol(RolUsuario.PROPIETARIO);
 
         if(!datos.isEmpty()){
             List<GetPropietarioDTO> lista = datos.stream()
@@ -97,8 +97,9 @@ public class PropietarioController {
     public ResponseEntity<?> delete(@PathVariable UUID id, @AuthenticationPrincipal Usuario usuario) {
 
         Optional<Usuario> prop = propietarioService.findById(id);
+        Optional <Usuario> datos = propietarioService.usuariosPorRol(RolUsuario.ADMIN);
 
-        if(!prop.isEmpty() && usuario.getId().equals(id)){
+        if(!prop.isEmpty() && usuario.getId().equals(id) || !prop.isEmpty() && datos.isPresent()){
 
             propietarioService.deleteById(id);
 

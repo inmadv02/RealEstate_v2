@@ -10,17 +10,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class ViviendaDTOConverter {
 
-    String t = "";
-    Tipo tipo = Tipo.VENTA;
-
     public Vivienda createViviendaSummarizedDtoToVivienda(CreateViviendaSummarizedDTO v){
-        return new Vivienda (
-                v.getTitulo(),
-                v.getDescripcion(),
-                v.getAvatar(),
-                v.getPrecio(),
-                v.getInteresas()
-        );
+        return Vivienda
+                .builder()
+                .titulo(v.getTitulo())
+                .precio(v.getPrecio())
+                .descripcion(v.getDescripcion())
+                .avatar(v.getAvatar())
+                .build();
     }
 
     public GetViviendaSummarizedDTO viviendaToGetViviendaSummarizedDTO(Vivienda m) {
@@ -37,19 +34,27 @@ public class ViviendaDTOConverter {
     }
 
     public Vivienda createViviendaDtoToVivienda(CreateViviendaDTO v){
-        return new Vivienda (
-                v.getTitulo(),
-                v.getAvatar(),
-                v.getTipo(),
-                v.getPrecio(),
-                v.getUbicacion(),
-                v.getMetrosCuadrados(),
-                v.getNumBanios(),
-                v.getNumHabitaciones(),
-                v.isTieneAscensor(),
-                v.isTieneGaraje(),
-                v.isTienePiscina()
-        );
+        return  Vivienda
+                .builder()
+                .id(v.getId())
+                .titulo(v.getTitulo())
+                .descripcion(v.getDescripcion())
+                .avatar(v.getAvatar())
+                .direccion(v.getDireccion())
+                .latlng(v.getLatlng())
+                .codigoPostal(v.getCodigoPostal())
+                .provincia(v.getProvincia())
+                .poblacion(v.getPoblacion())
+                .precio(v.getPrecio())
+                .tipoVivienda(v.getTipo())
+                .numBanios(v.getNumBanios())
+                .numHabitaciones(v.getNumHabitaciones())
+                .metrosCuadrados(v.getMetrosCuadrados())
+                .tienePiscina(v.isTienePiscina())
+                .tieneAscensor(v.isTieneAscensor())
+                .tieneGaraje(v.isTieneGaraje())
+                .build();
+
     }
 
     public GetViviendaDTO viviendaToGetViviendaDTO(Vivienda v) {
@@ -96,47 +101,7 @@ public class ViviendaDTOConverter {
 
 
 
-    public GetViviendaPropietarioDTO createViviendaPropietarioDTO (Vivienda v){
-        return GetViviendaPropietarioDTO
-                .builder()
-                .id(v.getId())
-                .descripcion(v.getDescripcion())
-                .avatar(v.getAvatar())
-                .direccion(v.getDireccion())
-                .codigoPostal(v.getCodigoPostal())
-                .provincia(v.getProvincia())
-                .poblacion(v.getPoblacion())
-                .metrosCuadrados(v.getMetrosCuadrados())
-                .propietario(v.getPropietario())
-                .build();
-    }
 
-    public Usuario getPropietarioVivienda (GetViviendaPropietarioDTO gv){
-        return Usuario.builder()
-                .id(gv.getId())
-                .build();
-    }
-
-    public Vivienda getViviendaPropietario (GetViviendaPropietarioDTO gv){
-        return Vivienda.builder()
-                .titulo(gv.getTitulo())
-                .descripcion(gv.getDescripcion())
-                .direccion(gv.getDireccion())
-                .codigoPostal(gv.getCodigoPostal())
-                .precio(gv.getPrecio())
-                .poblacion(gv.getPoblacion())
-                .provincia(gv.getProvincia())
-                .latlng(gv.getLatlng())
-                .tipoVivienda(gv.getTipo())
-                .metrosCuadrados(gv.getMetrosCuadrados())
-                .numBanios(gv.getNumBanios())
-                .numHabitaciones(gv.getNumHabitaciones())
-                .avatar(gv.getAvatar())
-                .tieneAscensor(gv.isTieneAscensor())
-                .tieneGaraje(gv.isTieneGaraje())
-                .tienePiscina(gv.isTienePiscina())
-                .build();
-    }
 
 
 

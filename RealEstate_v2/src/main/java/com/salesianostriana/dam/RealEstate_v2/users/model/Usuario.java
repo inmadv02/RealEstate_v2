@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.RealEstate_v2.users.model;
 
+import com.salesianostriana.dam.RealEstate_v2.model.Inmobiliaria;
 import com.salesianostriana.dam.RealEstate_v2.model.Interesa;
 import com.salesianostriana.dam.RealEstate_v2.model.Vivienda;
 import lombok.*;
@@ -57,13 +58,17 @@ public class Usuario implements UserDetails {
     private RolUsuario rol;
 
     @Builder.Default
-    @OneToMany(mappedBy = "propietario", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
+    @OneToMany(mappedBy = "propietario", fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE})
     @JsonIgnore
     private List<Vivienda> viviendas=new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "interesado")
     private List<Interesa> interesas = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "gestor_id", foreignKey = @ForeignKey(name = "FK_USUARIO_INMOBILIARIA"))
+    private Inmobiliaria inmobiliaria;
 
 
     public Collection<? extends GrantedAuthority> getAuthorities() {

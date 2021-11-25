@@ -75,7 +75,7 @@ public class UsuarioService extends BaseService<Usuario, UUID, UsuarioRepository
         }
     }
 
-    public Optional<Usuario> usuariosPropietarios(RolUsuario rolUsuario) {
+    public Optional<Usuario> usuariosPorRol(RolUsuario rolUsuario) {
         return repository.findUsuarioByRol(rolUsuario);
     }
 }

@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.RealEstate_v2.model;
 
+import com.salesianostriana.dam.RealEstate_v2.users.model.Usuario;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -34,6 +35,10 @@ public class Inmobiliaria implements Serializable {
     @Builder.Default
     @OneToMany(mappedBy = "inmobiliaria", fetch = FetchType.EAGER)
     private List<Vivienda> viviendas= new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "inmobiliaria", fetch = FetchType.EAGER)
+    private List<Usuario> gestores= new ArrayList<>();
 
     public Inmobiliaria(String nombre, String email, String telefono) {
     }

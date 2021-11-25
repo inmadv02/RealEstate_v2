@@ -19,19 +19,8 @@ import java.util.UUID;
 public class Vivienda implements Serializable {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator",
-            parameters = {
-                    @org.hibernate.annotations.Parameter(
-                            name = "uuid_gen_strategy_class",
-                            value = "org.hibernate.id.uuid.CustomVersionOneStrategy"
-                    )
-            }
-    )
-    @Column(name = "id", updatable = false, nullable = false)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     private String titulo, descripcion, avatar, latlng;
     private String direccion, poblacion, provincia;
@@ -73,12 +62,6 @@ public class Vivienda implements Serializable {
     private List<Interesa> interesas = new ArrayList<>();
 
 
-    public Vivienda(String titulo, String descripcion, double precio, int interesas) {
-    }
-
-    public Vivienda(String titulo, String descripcion, double precio) {
-    }
-
     public Vivienda(String titulo, String avatar, String tipo, double precio, String ubicacion, double metrosCuadrados, int numBanios, int numHabitaciones, boolean tieneAscensor, boolean tieneGaraje, boolean tienePiscina, String propietario, String inmobiliaria) {
     }
 
@@ -91,6 +74,8 @@ public class Vivienda implements Serializable {
 
     public Vivienda(String titulo, String avatar, String tipo, double precio, String ubicacion, double metrosCuadrados, int numBanios, int numHabitaciones, boolean tieneAscensor, boolean tieneGaraje, boolean tienePiscina) {
     }
+
+
 
 
     ///// HELPERS /////
