@@ -356,7 +356,18 @@ public class ViviendaController {
 
     }
 
-    @PostMapping("/vivienda/{id}/inmobiliaria/{id2}")
+    @Operation(summary = "Se asocia una vivienda a una inmobiliaria")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Se ha creado la asociación",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "No se ha guardado la asociación",
+                    content = @Content),
+    })
+
+    @PostMapping("{id}/inmobiliaria/{id2}")
     public ResponseEntity<GetViviendaDTO> establecerGestionInmobiliaria(@PathVariable Long id,
                                                                         @PathVariable Long id2,
                                                                         @AuthenticationPrincipal Usuario usuario) {
@@ -369,6 +380,9 @@ public class ViviendaController {
             if (usuario.getRol().equals(RolUsuario.ADMIN) || vivienda.get().getPropietario().getId().equals(usuario.getId())) {
 
                 vivienda.get().addToInmobiliaria(inmobiliaria.get());
+
+                viviendaService.save(vivienda.get());
+                inmobiliariaService.save(inmobiliaria.get());
 
                 return ResponseEntity.status(HttpStatus.CREATED)
                         .body(viviendaDTOConverter.viviendaToGetViviendaDTO(vivienda.get()));

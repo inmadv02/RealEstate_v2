@@ -146,14 +146,14 @@ public class InmobiliariaController {
         }
     }
 
-    @Operation(summary = "Crea un nuevo gestor")
+    @Operation(summary = "Se obtienen los gestores")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201",
-                    description = "Se ha creado el gestor",
+            @ApiResponse(responseCode = "200",
+                    description = "Se obtienen los gestores",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = Usuario.class))}),
             @ApiResponse(responseCode = "404",
-                    description = "No se ha encontrado la inmobiliaria",
+                    description = "No se han encontrado los gestores",
                     content = @Content),
     })
 
@@ -179,6 +179,17 @@ public class InmobiliariaController {
 
 
     }
+
+    @Operation(summary = "Crea un nuevo gestor")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Se ha creado el gestor",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Usuario.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se ha encontrado el gestor",
+                    content = @Content),
+    })
     @PostMapping("/{id}/gestor")
     public ResponseEntity<GetUsuarioDTO> addGestor (@PathVariable Long id, @RequestBody CreateUsuarioDTO gestor,
                                                     @AuthenticationPrincipal Usuario usuario) {
@@ -204,7 +215,15 @@ public class InmobiliariaController {
 
     }
 
-    @DeleteMapping("gestor/{id}")
+    @Operation(summary = "Borra un gestor")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204",
+                    description = "Se ha borrado el gestor",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Inmobiliaria.class))})
+    })
+
+    @DeleteMapping("/gestor/{id}")
     public ResponseEntity<GetUsuarioDTO> removeGestor (@PathVariable UUID id, @AuthenticationPrincipal Usuario gestor){
 
         Optional<Usuario> gestorEliminado = usuarioService.findById(id);
