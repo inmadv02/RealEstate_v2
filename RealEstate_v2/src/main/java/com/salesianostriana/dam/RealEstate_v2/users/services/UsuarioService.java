@@ -1,5 +1,7 @@
 package com.salesianostriana.dam.RealEstate_v2.users.services;
 
+import com.salesianostriana.dam.RealEstate_v2.model.Inmobiliaria;
+import com.salesianostriana.dam.RealEstate_v2.services.InmobiliariaService;
 import com.salesianostriana.dam.RealEstate_v2.services.base.BaseService;
 import com.salesianostriana.dam.RealEstate_v2.users.dto.CreateUsuarioDTO;
 import com.salesianostriana.dam.RealEstate_v2.users.model.RolUsuario;
@@ -20,6 +22,7 @@ import java.util.UUID;
 public class UsuarioService extends BaseService<Usuario, UUID, UsuarioRepository> implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
+    private final InmobiliariaService inmobiliariaService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -67,6 +70,7 @@ public class UsuarioService extends BaseService<Usuario, UUID, UsuarioRepository
                     .nombre(createUserDTO.getNombre())
                     .email(createUserDTO.getEmail())
                     .rol(RolUsuario.GESTOR)
+                    .inmobiliaria(inmobiliariaService.findById(createUserDTO.getInmobiliaria_id()).get())
                     .build();
             return save(usuario);
 
@@ -78,4 +82,6 @@ public class UsuarioService extends BaseService<Usuario, UUID, UsuarioRepository
     public Optional<Usuario> usuariosPorRol(RolUsuario rolUsuario) {
         return repository.findUsuarioByRol(rolUsuario);
     }
+
+
 }

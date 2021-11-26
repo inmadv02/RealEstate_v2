@@ -112,4 +112,15 @@ public class Usuario implements UserDetails {
     }
 
 
+    ///// HELPERS ////
+
+    public void addToInmobiliaria(Inmobiliaria i) {
+        this.inmobiliaria = i;
+        i.getGestores().add(this);
+    }
+
+    public void removeFromInmobiliaria(Inmobiliaria i) {
+        i.getGestores().remove(this);
+        this.inmobiliaria = null;
+    }
 }

@@ -157,33 +157,60 @@ public class InmobiliariaController {
                     content = @Content),
     })
 
+    @GetMapping("{id}/gestor")
+    public ResponseEntity<List<GetUsuarioDTO>> findAllGestores(@PathVariable Long id, @AuthenticationPrincipal Usuario usuario){
+
+        Optional <Inmobiliaria> inmobiliaria = inmobiliariaService.findById(id);
+        List<Usuario> lista = inmobiliariaService.findById(id).get().getGestores();
+
+        if (inmobiliaria.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else if (usuario.getRol().equals(RolUsuario.ADMIN) || usuario.getInmobiliaria().equals(inmobiliaria.get())) {
+            List <GetUsuarioDTO> lista2 = lista.stream()
+                    .map(usuarioDTOConverter::usuarioTOGetUsuarioDTO)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok().body(lista2);
+
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+
+
+    }
     @PostMapping("/{id}/gestor")
-    public ResponseEntity<GetUsuarioDTO> addGestor (@PathVariable Long id, @RequestBody CreateUsuarioDTO gestor){
+    public ResponseEntity<GetUsuarioDTO> addGestor (@PathVariable Long id, @RequestBody CreateUsuarioDTO gestor,
+                                                    @AuthenticationPrincipal Usuario usuario) {
+
         Optional<Inmobiliaria> inmo = inmobiliariaService.findById(id);
-        if(inmobiliariaService.findById(id).isEmpty()){
+
+
+        if(inmo.isEmpty()){
             return ResponseEntity.notFound().build();
         }
-        else{
+        else if (usuario.getRol().equals(RolUsuario.ADMIN) || usuario.getInmobiliaria().getId().equals(id)){
+
             Usuario getUsuarioDTO = usuarioService.saveGestor(gestor);
 
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(usuarioDTOConverter
                             .usuarioTOGetUsuarioDTO(getUsuarioDTO));
+
         }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
     }
 
     @DeleteMapping("gestor/{id}")
     public ResponseEntity<GetUsuarioDTO> removeGestor (@PathVariable UUID id, @AuthenticationPrincipal Usuario gestor){
 
-        Optional <Usuario> datos = usuarioService.usuariosPorRol(RolUsuario.GESTOR);
-        Optional <Usuario> datos2 = usuarioService.usuariosPorRol(RolUsuario.ADMIN);
         Optional<Usuario> gestorEliminado = usuarioService.findById(id);
 
-        // Comprobar la inmobiliaria con la del usuario gestor con la del buscado por id
 
-        if (gestorEliminado.get().getInmobiliaria().equals(gestor.getInmobiliaria())
-                || datos2.isPresent() ) {
+        if (gestor.getRol().equals(RolUsuario.ADMIN) || gestorEliminado.get().getInmobiliaria().getId().equals(gestor.getInmobiliaria().getId())) {
             usuarioService.deleteById(id);
 
             return ResponseEntity.noContent().build();

@@ -15,4 +15,5 @@ public class CreateUsuarioDTO {
     private String email;
     private String password;
     private String password2;
+    private Long inmobiliaria_id;
 }
