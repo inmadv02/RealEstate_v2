@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.RealEstate_v2.services;
 
 import com.salesianostriana.dam.RealEstate_v2.dto.vivienda.CreateViviendaDTO;
+import com.salesianostriana.dam.RealEstate_v2.dto.vivienda.GetViviendaDTO;
 import com.salesianostriana.dam.RealEstate_v2.dto.vivienda.ViviendaDTOConverter;
 import com.salesianostriana.dam.RealEstate_v2.model.Vivienda;
 import com.salesianostriana.dam.RealEstate_v2.repositories.ViviendaRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -33,5 +35,9 @@ public class ViviendaService extends BaseService<Vivienda, Long, ViviendaReposit
         this.save(vivienda);
 
         return vivienda;
+    }
+
+    public List<Vivienda> encontrarViviendasPropietario(UUID id){
+        return repository.findViviendaByPropietarioId(id);
     }
 }

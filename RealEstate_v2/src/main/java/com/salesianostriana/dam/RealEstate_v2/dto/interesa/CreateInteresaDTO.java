@@ -1,16 +1,16 @@
 package com.salesianostriana.dam.RealEstate_v2.dto.interesa;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
-public class GetInteresaDTO {
+public class CreateInteresaDTO {
 
     private String nombre;
     private String apellidos;
@@ -19,5 +19,5 @@ public class GetInteresaDTO {
     private String telefono;
     private String avatar;
     private String mensaje;
-    private LocalDateTime createdDate;
+    private Date createdDate;
 }

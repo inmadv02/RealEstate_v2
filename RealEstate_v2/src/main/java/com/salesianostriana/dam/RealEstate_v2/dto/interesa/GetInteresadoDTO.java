@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.RealEstate_v2.dto.interesa;
 
 import com.salesianostriana.dam.RealEstate_v2.model.Interesa;
+import com.salesianostriana.dam.RealEstate_v2.users.dto.GetUsuarioDTO;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -8,23 +9,20 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class GetInteresadoDTO {
+public class GetInteresadoDTO extends GetUsuarioDTO {
 
-    private Long id;
-    private String nombre;
-    private String apellidos;
-    private String direccion;
-    private String email;
-    private String telefono;
-    private String avatar;
     private String mensaje;
     private Date createdDate;
 
-    public GetInteresadoDTO(Long id, String nombre, String apellidos, String direccion, String email, String telefono, String avatar) {
+    public GetInteresadoDTO(UUID id, String nombre, String email, String avatar, String rol, String mensaje, Date createdDate) {
+        super(id, nombre, email, avatar, rol);
+        this.mensaje = mensaje;
+        this.createdDate = createdDate;
     }
 }

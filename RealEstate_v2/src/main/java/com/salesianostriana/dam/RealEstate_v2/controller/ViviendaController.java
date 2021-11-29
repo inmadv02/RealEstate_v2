@@ -4,6 +4,7 @@ import com.salesianostriana.dam.RealEstate_v2.dto.inmobiliaria.GetInmobiliariaDT
 import com.salesianostriana.dam.RealEstate_v2.dto.inmobiliaria.GetViviendaInmobiliariaDto;
 import com.salesianostriana.dam.RealEstate_v2.dto.inmobiliaria.InmobiliariaDTOConverter;
 import com.salesianostriana.dam.RealEstate_v2.dto.interesa.GetInteresaDTO;
+import com.salesianostriana.dam.RealEstate_v2.dto.interesa.GetInteresadoDTO;
 import com.salesianostriana.dam.RealEstate_v2.dto.interesa.InteresaDTOConverter;
 import com.salesianostriana.dam.RealEstate_v2.dto.vivienda.*;
 import com.salesianostriana.dam.RealEstate_v2.repositories.InmobiliariaRepository;
@@ -83,6 +84,27 @@ public class ViviendaController {
         }
     }
 
+    @GetMapping("/propietario")
+    public ResponseEntity<List<GetViviendaSummarizedDTO>> findAllByPropietario(@AuthenticationPrincipal Usuario propietario){
+
+        List <Vivienda> datos = viviendaService.encontrarViviendasPropietario(propietario.getId());
+
+        if(datos.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        else {
+            List<GetViviendaSummarizedDTO> lista = datos.stream()
+                    .map(viviendaDTOConverter::viviendaToGetViviendaSummarizedDTO)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok().body(lista);
+        }
+
+
+
+    }
+
+
     @Operation(summary = "Crea una nueva vivienda")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
@@ -111,7 +133,7 @@ public class ViviendaController {
         }
 
     }
-/*
+
     @Operation(summary = "Crea un nuevo interesado e interesa asociado a una vivienda")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
@@ -123,64 +145,15 @@ public class ViviendaController {
                     content = @Content),
     })
     @PostMapping("/{id}/meinteresa")
-    public ResponseEntity<Interesado> createInteresa (@RequestBody GetInteresadoDTO dto, @PathVariable Long id){
+    public ResponseEntity<GetInteresaDTO> createInteresa (@RequestBody GetInteresadoDTO dto, @PathVariable Long id){
 
-        Interesado interesado = interesadoDTOConverter.a(dto);
-        Interesa interesa = interesadoDTOConverter.b(dto);
-
-        interesadoService.save(interesado);
-        interesa.addInteresado(interesado);
-        interesa.setVivienda(viviendaService.findById(id).get());
-
-        interesaService.save(interesa);
-        interesado.getInteresas().add(interesa);
-
-        return  ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(interesadoService.save(interesado));
 
 
     }
 
 
 
-    @Operation(summary = "Crea un interesa asociado a una vivienda y a un interesado")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201",
-                    description = "Se ha creado el interesa asociado a una vivienda y a un interesado",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Vivienda.class))}),
-            @ApiResponse(responseCode = "400",
-                    description = "No se ha creado el interesa",
-                    content = @Content),
-    })
-    @PostMapping("/{id}/meinteresa/{id2}")
-    public ResponseEntity<Interesa> create (@PathVariable Long id2, @RequestBody GetInteresaDTO nuevoInteresa, @PathVariable Long id){
 
-
-        if(viviendaService.findById(id).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }else {
-
-            Interesa interesa = interesaDTOConverter.create(nuevoInteresa);
-
-            Interesado interesado = interesadoService.getById(id2);
-
-            Vivienda vivienda = viviendaService.getById(id);
-
-            interesa.addVivienda(vivienda);
-            interesa.addInteresado(interesado);
-            Interesa result = interesaService.save(interesa);
-
-
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(result);
-
-        }
-
-    }
-*/
     @Operation(summary = "Obtiene una vivienda creada")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
