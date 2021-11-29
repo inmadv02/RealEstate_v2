@@ -30,6 +30,8 @@ public class UsuarioService extends BaseService<Usuario, UUID, UsuarioRepository
                 .orElseThrow(()-> new UsernameNotFoundException(email + " no encontrado"));
     }
 
+    // TODO ¿Seguro que estos 3 métodos no se podrían refactorizar para tener un único método más genérico y más fácil de mantener?
+
     public Usuario save(CreateUsuarioDTO createUserDTO) {
         if(createUserDTO.getPassword().contentEquals(createUserDTO.getPassword2())) {
             Usuario usuario = Usuario.builder()

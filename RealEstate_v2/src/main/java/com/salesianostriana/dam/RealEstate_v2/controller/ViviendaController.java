@@ -191,7 +191,7 @@ public class ViviendaController {
                     description = "No se ha encontrado la vivienda",
                     content = @Content),
     })
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") // TODO No aporta información sobre el usuario
         public ResponseEntity<GetViviendaDTO> findOne(@PathVariable Long id) {
 
         Optional<Vivienda> vivienda = viviendaService.findById(id);

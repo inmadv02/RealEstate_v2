@@ -55,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                // TODO Creo que muchas de estas peticiones se pueden agrupar (usando **)
                 .antMatchers(HttpMethod.POST, "/auth/login").anonymous()
                 .antMatchers(HttpMethod.POST, "/user/auth/register/gestor").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/user/auth/register/propietario").anonymous()

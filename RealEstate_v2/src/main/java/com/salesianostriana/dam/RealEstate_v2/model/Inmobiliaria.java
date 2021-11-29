@@ -33,7 +33,7 @@ public class Inmobiliaria implements Serializable {
     private String telefono;
 
     @Builder.Default
-    @OneToMany(mappedBy = "inmobiliaria", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "inmobiliaria", fetch = FetchType.EAGER) // TODO ¿EAGER? :(((
     private List<Vivienda> viviendas= new ArrayList<>();
 
     @Builder.Default
