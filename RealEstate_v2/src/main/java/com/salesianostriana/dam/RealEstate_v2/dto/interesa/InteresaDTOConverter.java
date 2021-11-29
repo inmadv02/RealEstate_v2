@@ -8,9 +8,8 @@ import java.time.LocalDateTime;
 @Component
 public class InteresaDTOConverter {
 
-    public Interesa create(GetInteresaDTO i) {
+    public Interesa create(CreateInteresaDTO i) {
         return Interesa.builder()
-                .interesado(new Usuario(i.g))
                 .createdDate(LocalDateTime.now())
                 .mensaje(i.getMensaje())
                 .build();

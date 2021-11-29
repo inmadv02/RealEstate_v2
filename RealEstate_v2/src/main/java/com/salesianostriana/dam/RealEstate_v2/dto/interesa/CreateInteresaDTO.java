@@ -12,12 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class CreateInteresaDTO {
 
-    private String nombre;
-    private String apellidos;
-    private String direccion;
-    private String email;
-    private String telefono;
-    private String avatar;
+
     private String mensaje;
     private Date createdDate;
 }

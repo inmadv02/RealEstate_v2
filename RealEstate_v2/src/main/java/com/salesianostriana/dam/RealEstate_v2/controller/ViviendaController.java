@@ -3,6 +3,7 @@ package com.salesianostriana.dam.RealEstate_v2.controller;
 import com.salesianostriana.dam.RealEstate_v2.dto.inmobiliaria.GetInmobiliariaDTO;
 import com.salesianostriana.dam.RealEstate_v2.dto.inmobiliaria.GetViviendaInmobiliariaDto;
 import com.salesianostriana.dam.RealEstate_v2.dto.inmobiliaria.InmobiliariaDTOConverter;
+import com.salesianostriana.dam.RealEstate_v2.dto.interesa.CreateInteresaDTO;
 import com.salesianostriana.dam.RealEstate_v2.dto.interesa.GetInteresaDTO;
 import com.salesianostriana.dam.RealEstate_v2.dto.interesa.GetInteresadoDTO;
 import com.salesianostriana.dam.RealEstate_v2.dto.interesa.InteresaDTOConverter;
@@ -145,9 +146,19 @@ public class ViviendaController {
                     content = @Content),
     })
     @PostMapping("/{id}/meinteresa")
-    public ResponseEntity<GetInteresaDTO> createInteresa (@RequestBody GetInteresadoDTO dto, @PathVariable Long id){
+    public ResponseEntity<CreateInteresaDTO> createInteresa (@RequestBody CreateInteresaDTO dto,
+                                                          @PathVariable Long id,
+                                                          @AuthenticationPrincipal Usuario interesado){
 
+        Optional <Vivienda> vivienda = viviendaService.findById(id);
+        if(dto.getMensaje().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
 
+        else {
+            interesaService.addInteresa(dto, interesado, vivienda.get());
+            return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+        }
 
     }
 

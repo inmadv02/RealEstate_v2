@@ -20,4 +20,13 @@ public interface ViviendaRepository extends JpaRepository<Vivienda, Long> {
     List<Vivienda> top5ViviendasInteresas();
 
     List<Vivienda> findViviendaByPropietarioId (UUID id);
+
+    @Query("""
+            select new com.salesianostriana.dam.RealEstate_v2.dto.vivienda.GetViviendaInteresaDTO (
+            v.id, v.titulo, v.descripcion, v.avatar, v.precio, (select count(*) from Interesa i
+            where i.vivienda=v.id, 
+            (CASE
+                WHEN (select count(*) from Interesa i2 where
+            """)
+    List <Vivienda> viviendasInteresUsuario ();
 }

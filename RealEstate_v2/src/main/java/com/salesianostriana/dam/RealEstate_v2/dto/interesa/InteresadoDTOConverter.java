@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class InteresadoDTOConverter {
 
-
+/*
     public Usuario createInteresadoDTOToInteresado(CreateInteresaDTO c){
         return Usuario
                 .builder()
@@ -20,5 +20,5 @@ public class InteresadoDTOConverter {
                 .build();
     }
     
-
+*/
 }

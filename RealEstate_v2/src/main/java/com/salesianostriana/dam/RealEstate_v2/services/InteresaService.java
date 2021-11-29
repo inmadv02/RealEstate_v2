@@ -3,6 +3,7 @@ package com.salesianostriana.dam.RealEstate_v2.services;
 import com.salesianostriana.dam.RealEstate_v2.dto.interesa.CreateInteresaDTO;
 import com.salesianostriana.dam.RealEstate_v2.dto.interesa.InteresaDTOConverter;
 import com.salesianostriana.dam.RealEstate_v2.model.Interesa;
+import com.salesianostriana.dam.RealEstate_v2.model.Vivienda;
 import com.salesianostriana.dam.RealEstate_v2.repositories.InteresaRepository;
 import com.salesianostriana.dam.RealEstate_v2.services.base.BaseService;
 import com.salesianostriana.dam.RealEstate_v2.users.model.Usuario;
@@ -16,14 +17,16 @@ public class InteresaService extends BaseService<Interesa, Long, InteresaReposit
 
     private final InteresaDTOConverter converter;
 
-    public Interesa addInteresa (@RequestBody CreateInteresaDTO dto, Usuario propietario) {
+    public Interesa addInteresa (@RequestBody CreateInteresaDTO dto, Usuario interesado, Vivienda vivienda) {
 
-        Interesa interesa = dtoConverter.createViviendaDtoToVivienda(dto);
+        Interesa interesa = converter.create(dto);
 
-        vivienda.addToPropietario(propietario);
+        interesa.addToUsuario(interesado);
 
-        this.save(vivienda);
+        interesa.addToVivienda(vivienda);
 
-        return vivienda;
+        this.save(interesa);
+
+        return interesa;
     }
 }

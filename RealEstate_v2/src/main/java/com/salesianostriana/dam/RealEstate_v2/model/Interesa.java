@@ -40,4 +40,28 @@ public class Interesa {
     private LocalDateTime createdDate = LocalDateTime.now();
     private String mensaje;
 
+
+    /// HELPERS ////
+
+
+    public void addToVivienda(Vivienda v) {
+        this.vivienda = v;
+        v.getInteresas().add(this);
+    }
+
+    public void removeFromVivienda(Vivienda v){
+        v.getInteresas().remove(this);
+        this.vivienda = null;
+    }
+
+    public void addToUsuario(Usuario u) {
+        this.interesado = u;
+        u.getInteresas().add(this);
+    }
+
+    public void removeFromUsuario(Usuario u){
+        u.getInteresas().remove(this);
+        this.vivienda = null;
+    }
+
 }
